@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  tests-and-lint:
+  linting:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -17,11 +17,26 @@ jobs:
         with:
           node-version: '18'
 
-      - name: add dependencies
+      - name: Install dependencies
         run: npm install
 
       - name: Run Lint
         run: npm run lint
+
+  testing:
+    runs-on: ubuntu-latest
+    needs: linting
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm install
 
       - name: Run Tests
         run: npm test
